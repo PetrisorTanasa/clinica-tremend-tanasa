@@ -14,7 +14,8 @@ class AccountService
     private const POSSIBLE_ROLES = [
         "GENERAL_MANAGER",
         "DOCTOR",
-        "ASSISTANT"
+        "ASSISTANT",
+        "PACIENT"
     ];
     function generateRandomString($length = 50) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -42,7 +43,7 @@ class AccountService
         }
     }
     public function createUser(array $account_data, ManagerRegistry $managerRegistry){
-        if(in_array($account_data["role"],self::POSSIBLE_ROLES)) {
+        if(in_array($account_data["role"],Account::POSSIBLE_ROLES)) {
             $new_account = new Account();
             $new_account->setName($account_data["name"])
                 ->setSurname($account_data["surname"])
@@ -58,7 +59,7 @@ class AccountService
         }
     }
     public function updateUser(array $account_data, ManagerRegistry $managerRegistry){
-        if(in_array($account_data["role"],self::POSSIBLE_ROLES)) {
+        if(in_array($account_data["role"],Account::POSSIBLE_ROLES)) {
             $update_data = $managerRegistry->getRepository(Account::class)->find($account_data["id"]);
             $update_data->setName($account_data["name"])
                 ->setSurname($account_data["surname"])
