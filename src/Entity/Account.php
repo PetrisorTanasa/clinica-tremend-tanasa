@@ -8,6 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 class Account
 {
+
+    public const POSSIBLE_ROLES = [
+        "GENERAL_MANAGER",
+        "DOCTOR",
+        "ASSISTANT",
+        "PACIENT"
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

@@ -17,10 +17,18 @@ class LoginController extends AbstractController
     private const POSSIBLE_ROLES = [
         "GENERAL_MANAGER",
         "DOCTOR",
-        "ASSISTANT"
+        "ASSISTANT",
+        "PACIENT"
     ];
     private const ALLOWED_ROLES = [
         "GENERAL_MANAGER"
+    ];
+    private const RESTRICTED_ROLES = [
+        "DOCTOR"
+    ];
+    private const FORBIDDEN_ROLES = [
+        "ASSISTANT",
+        "PACIENT"
     ];
     #[Route('/login', name: 'app_login', methods:['POST'])]
     public function login(Request $request, ManagerRegistry $managerRegistry)
@@ -57,7 +65,7 @@ class LoginController extends AbstractController
                 $userAuthentification = (new \App\Service\AccountService)->checkUser($data["name"], $data["password"], $managerRegistry);
             }
             if ($userAuthentification) {
-                if(in_array($userAuthentification->getRole(),self::ALLOWED_ROLES)){
+                if(in_array($userAuthentification->getRole(),self::ALLOWED_ROLES) or ($data["action"] != "delete" and in_array($userAuthentification->getRole(),self::RESTRICTED_ROLES) and in_array($data["info"]["role"],self::FORBIDDEN_ROLES))){
                     if($data["action"]=="create") {
                         $status = (new \App\Service\AccountService)->createUser($data["info"], $managerRegistry);
                     }
