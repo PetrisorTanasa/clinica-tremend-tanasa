@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Account;
 use App\Repository;
 use App\Service\AccountService;
 use Doctrine\ORM\EntityManager;
@@ -14,21 +15,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends AbstractController
 {
-    private const POSSIBLE_ROLES = [
-        "GENERAL_MANAGER",
-        "DOCTOR",
-        "ASSISTANT",
-        "PACIENT"
-    ];
     private const ALLOWED_ROLES = [
-        "GENERAL_MANAGER"
+        Account::GENERAL_MANAGER
     ];
     private const RESTRICTED_ROLES = [
-        "DOCTOR"
+        Account::DOCTOR
     ];
     private const FORBIDDEN_ROLES = [
-        "ASSISTANT",
-        "PACIENT"
+        Account::ASSISTANT,
+        Account::PACIENT
     ];
     #[Route('/login', name: 'app_login', methods:['POST'])]
     public function login(Request $request, ManagerRegistry $managerRegistry)
@@ -41,6 +36,10 @@ class LoginController extends AbstractController
             }
             $userAuthentification = (new \App\Service\AccountService)->checkUser($data["name"], $data["password"], $managerRegistry);
             if ($userAuthentification) {
+                if($userAuthentification->getStatus() == Account::INACTIVE_STATUS){
+                    $response = new Response("Your account has been deactivated. Contact the system admin if you there has been a mistake");
+                    return $response->setStatusCode(Response::HTTP_FORBIDDEN);
+                }
                 return $this->json([
                     'message' => 'Welcome to clinica Tremend!',
                     'bearer_token' => $userAuthentification->getBearerToken(),
@@ -64,7 +63,7 @@ class LoginController extends AbstractController
             }else {
                 $userAuthentification = (new \App\Service\AccountService)->checkUser($data["name"], $data["password"], $managerRegistry);
             }
-            if ($userAuthentification) {
+            if ($userAuthentification and $userAuthentification->getStatus() == Account::INACTIVE_STATUS) {
                 if(in_array($userAuthentification->getRole(),self::ALLOWED_ROLES) or ($data["action"] != "delete" and in_array($userAuthentification->getRole(),self::RESTRICTED_ROLES) and in_array($data["info"]["role"],self::FORBIDDEN_ROLES))){
                     if($data["action"]=="create") {
                         $status = (new \App\Service\AccountService)->createUser($data["info"], $managerRegistry);

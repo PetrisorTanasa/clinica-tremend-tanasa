@@ -21,6 +21,8 @@ class Account
     public const GENERAL_MANAGER = "GENERAL_MANAGER";
     public const ASSISTANT = "ASSISTANT";
 
+    public const INACTIVE_STATUS = "inactive";
+
 #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
