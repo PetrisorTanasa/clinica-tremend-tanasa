@@ -125,7 +125,7 @@ class TreatmentController extends AbstractController
             } else {
                 $userAuthentification = (new \App\Service\AccountService)->checkUser($data["name"], $data["password"], $managerRegistry);
             }
-            if ($userAuthentification and $userAuthentification->getStatus == Account::ACTIVE_STATUS) {
+            if ($userAuthentification and $userAuthentification->getStatus() == Account::ACTIVE_STATUS) {
                 $doctor_treatment = (new \App\Service\TreatmentService())->readTreatment(["pacient_id"=>$data["pacient_id"]], $managerRegistry);
                 $assistant_treatment = (new \App\Service\TreatmentService())->assistantReadTreatment(["pacient_id"=>$data["pacient_id"]], $managerRegistry);
                 $doctor_treatment["assistants_treatments"] = $assistant_treatment["assistants_treatments"];
