@@ -56,7 +56,7 @@ class TreatmentService
         return $returned_data;
     }
     public function updateTreatment(array $treatment_data, ManagerRegistry $managerRegistry){
-        $treatment = $managerRegistry->getRepository(Treatment::class)->findOneBy(["id"=>$treatment_data["info"]["id"]]);
+        $treatment = $managerRegistry->getRepository(Treatment::class)->findOneBy(["id"=>$treatment_data["id"]]);
         if(isset($treatment)){
             $currentDateTime = new \DateTimeImmutable();
 //            $aux_data = explode(" ",$treatment_data["pacient_name"],1);
