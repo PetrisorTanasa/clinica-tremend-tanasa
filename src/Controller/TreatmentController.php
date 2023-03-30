@@ -28,7 +28,7 @@ class TreatmentController extends AbstractController
             }
             if ($userAuthentification) {
                 if(in_array($userAuthentification->getRole(),self::ALLOWED_ROLES)){
-                    $data["info"]["medic"] = $userAuthentification->getName() . $userAuthentification->getSurname();
+                    $data["info"]["medic"] = $userAuthentification->getName() . " " . $userAuthentification->getSurname();
                     if($data["action"]=="create") {
                         if($userAuthentification->getRole() == Account::DOCTOR) {
                             $status = (new \App\Service\TreatmentService)->createTreatment($data["info"], $managerRegistry);
@@ -38,7 +38,7 @@ class TreatmentController extends AbstractController
                         }
                     }
                     if($data["action"]=="read") {
-                        $response = new JsonResponse((new \App\Service\AccountService)->readTreatment($data["info"], $managerRegistry));
+                        $response = new JsonResponse((new \App\Service\TreatmentService())->readTreatment($data["info"], $managerRegistry));
                         return $response;
                     }
                     if($data["action"]=="update") {
@@ -110,6 +110,27 @@ class TreatmentController extends AbstractController
             } else {
                 $response = new Response("Login failed");
                 return $response->setStatusCode(403);
+            }
+        }catch(\Exception $exception){
+            $response = new Response("Unexpected error occured. Please contact an admin and give them the following error: " . $exception);
+            return $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        }
+    }
+    #[Route('/all_treatments', name: 'app_all_treatments', methods:['GET'])]
+    public function readAllTreatments(Request $request, ManagerRegistry $managerRegistry){
+        try {
+            $data = json_decode($request->getContent(), true);
+            if (isset($data["bearer_token"])) {
+                $userAuthentification = (new \App\Service\AccountService)->checkBearerToken($data["bearer_token"], $managerRegistry);
+            } else {
+                $userAuthentification = (new \App\Service\AccountService)->checkUser($data["name"], $data["password"], $managerRegistry);
+            }
+            if ($userAuthentification) {
+                $doctor_treatment = (new \App\Service\TreatmentService())->readTreatment(["pacient_id"=>$data["pacient_id"]], $managerRegistry);
+                $assistant_treatment = (new \App\Service\TreatmentService())->assistantReadTreatment(["pacient_id"=>$data["pacient_id"]], $managerRegistry);
+                $doctor_treatment["assistants_treatments"] = $assistant_treatment["assistants_treatments"];
+                $response = new JsonResponse($doctor_treatment);
+                return $response;
             }
         }catch(\Exception $exception){
             $response = new Response("Unexpected error occured. Please contact an admin and give them the following error: " . $exception);
