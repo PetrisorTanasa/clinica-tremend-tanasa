@@ -72,5 +72,6 @@ class AccountService
         $deleted_data = $managerRegistry->getRepository(Account::class)->find($account_data["id"]);
         $managerRegistry->getManager()->remove($deleted_data);
         $managerRegistry->getManager()->flush();
+        return true;
     }
 }
