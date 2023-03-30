@@ -26,7 +26,7 @@ class TreatmentController extends AbstractController
             }else {
                 $userAuthentification = (new \App\Service\AccountService)->checkUser($data["name"], $data["password"], $managerRegistry);
             }
-            if ($userAuthentification and $userAuthentification->getStatus() == Account::INACTIVE_STATUS) {
+            if ($userAuthentification and $userAuthentification->getStatus() != Account::INACTIVE_STATUS) {
                 if(in_array($userAuthentification->getRole(),self::ALLOWED_ROLES)){
                     $data["info"]["medic"] = $userAuthentification->getName() . " " . $userAuthentification->getSurname();
                     if($data["action"]=="create") {
@@ -80,7 +80,7 @@ class TreatmentController extends AbstractController
             }else {
                 $userAuthentification = (new \App\Service\AccountService)->checkUser($data["name"], $data["password"], $managerRegistry);
             }
-            if ($userAuthentification and $userAuthentification->getStatus() == Account::INACTIVE_STATUS) {
+            if ($userAuthentification and $userAuthentification->getStatus() != Account::INACTIVE_STATUS) {
                 if($userAuthentification->getRole() == Account::ASSISTANT){
                     $data["info"]["assistant_id"] = $userAuthentification->getId();
                     if($data["action"]=="create") {
@@ -125,7 +125,7 @@ class TreatmentController extends AbstractController
             } else {
                 $userAuthentification = (new \App\Service\AccountService)->checkUser($data["name"], $data["password"], $managerRegistry);
             }
-            if ($userAuthentification and $userAuthentification->getStatus == Account::INACTIVE_STATUS) {
+            if ($userAuthentification and $userAuthentification->getStatus != Account::INACTIVE_STATUS) {
                 $doctor_treatment = (new \App\Service\TreatmentService())->readTreatment(["pacient_id"=>$data["pacient_id"]], $managerRegistry);
                 $assistant_treatment = (new \App\Service\TreatmentService())->assistantReadTreatment(["pacient_id"=>$data["pacient_id"]], $managerRegistry);
                 $doctor_treatment["assistants_treatments"] = $assistant_treatment["assistants_treatments"];
