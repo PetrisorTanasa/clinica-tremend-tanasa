@@ -63,7 +63,7 @@ class LoginController extends AbstractController
             }else {
                 $userAuthentification = (new \App\Service\AccountService)->checkUser($data["name"], $data["password"], $managerRegistry);
             }
-            if ($userAuthentification and $userAuthentification->getStatus() != Account::INACTIVE_STATUS) {
+            if ($userAuthentification and $userAuthentification->getStatus() == Account::ACTIVE_STATUS) {
                 if(in_array($userAuthentification->getRole(),self::ALLOWED_ROLES) or ($data["action"] != "delete" and in_array($userAuthentification->getRole(),self::RESTRICTED_ROLES) and in_array($data["info"]["role"],self::FORBIDDEN_ROLES))){
                     if($data["action"]=="create") {
                         $status = (new \App\Service\AccountService)->createUser($data["info"], $managerRegistry);
