@@ -16,7 +16,12 @@ class Account
         "PACIENT"
     ];
 
-    #[ORM\Id]
+    public const DOCTOR = "DOCTOR";
+    public const PACIENT = "PACIENT";
+    public const GENERAL_MANAGER = "GENERAL_MANAGER";
+    public const ASSISTANT = "ASSISTANT";
+
+#[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;

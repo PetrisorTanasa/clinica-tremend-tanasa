@@ -11,12 +11,6 @@ use Doctrine\Persistence\ObjectRepository;
 
 class AccountService
 {
-    private const POSSIBLE_ROLES = [
-        "GENERAL_MANAGER",
-        "DOCTOR",
-        "ASSISTANT",
-        "PACIENT"
-    ];
     function generateRandomString($length = 50) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
