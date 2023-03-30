@@ -22,6 +22,7 @@ class Account
     public const ASSISTANT = "ASSISTANT";
 
     public const INACTIVE_STATUS = "inactive";
+    public const ACTIVE_STATUS = "active";
 
 #[ORM\Id]
     #[ORM\GeneratedValue]

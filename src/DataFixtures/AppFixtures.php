@@ -65,11 +65,11 @@ class AppFixtures extends Fixture
             "in progress"
         ];
         foreach($data as $info){
-            if($info->getRole() == "ASSISTANT") {
+            if($info->getRole() == Account::ASSISTANT) {
                 $assistant_id[] = $info->getId();
-            }else if($info->getRole() == "DOCTOR") {
+            }else if($info->getRole() == Account::DOCTOR) {
                 $doctor_name[] = $info->getName() . " " . $info->getSurname();
-            }else if($info->getRole() == "PACIENT") {
+            }else if($info->getRole() == Account::PACIENT) {
                 $pacients[] = [$info->getId(),$info->getName() . " " . $info->getSurname()];
             }
         }
@@ -123,20 +123,20 @@ class AppFixtures extends Fixture
     public function loadAccounts(ObjectManager $manager): void
     {
         $account_data = [
-            ["Tanasa","Florin Petrisor","GENERAL_MANAGER"],
-            ["Dilirici","Mihai","DOCTOR"],
-            ["Ghetoiu","Laurentiu","DOCTOR"],
-            ["Florea","Madalin","DOCTOR"],
-            ["Besliu","Radu","ASSISTANT"],
-            ["Militaru","Mihai","ASSISTANT"],
-            ["Cazacu","Cristian","ASSISTANT"],
-            ["Stanciu","Carol","ASSISTANT"],
-            ["Qulescu","Wulescu","PACIENT"],
-            ["Eulescu","Rulescu","PACIENT"],
-            ["Tulescu","Yulescu","PACIENT"],
-            ["Uulescu","Iulescu","PACIENT"],
-            ["Oulescu","Pulescu","PACIENT"],
-            ["Aulescu","Sulescu","PACIENT"]
+            ["Tanasa","Florin Petrisor",Account::GENERAL_MANAGER],
+            ["Dilirici","Mihai",Account::DOCTOR],
+            ["Ghetoiu","Laurentiu",Account::DOCTOR],
+            ["Florea","Madalin",Account::DOCTOR],
+            ["Besliu","Radu",Account::ASSISTANT],
+            ["Militaru","Mihai",Account::ASSISTANT],
+            ["Cazacu","Cristian",Account::ASSISTANT],
+            ["Stanciu","Carol",Account::ASSISTANT],
+            ["Qulescu","Wulescu",Account::PACIENT],
+            ["Eulescu","Rulescu",Account::PACIENT],
+            ["Tulescu","Yulescu",Account::PACIENT],
+            ["Uulescu","Iulescu",Account::PACIENT],
+            ["Oulescu","Pulescu",Account::PACIENT],
+            ["Aulescu","Sulescu",Account::PACIENT]
         ];
         foreach($account_data as $account){
             $new_account = new Account();
@@ -145,7 +145,7 @@ class AppFixtures extends Fixture
                 ->setBearerToken($this->generateRandomString())
                 ->setPassword("parola123")
                 ->setRole($account[2])
-                ->setStatus("active");
+                ->setStatus(Account::ACTIVE_STATUS);
             $manager->persist($new_account);
             $manager->flush();
         }
